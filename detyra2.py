@@ -5,7 +5,7 @@
 # 4. Mesazhi behet xor me celesin , celesi behet slice ashtu qe te jete i gjate sa mesazhi
 # 5. Mesazhi dergohet dhe marresi e ben xor ciphertext me celesin qe ai poashtu posedon
 # 6. Fitohet mesazhi plain
-# 7. Nese tentohet komunikimi prape celesi nderrohet, pasi eshtet one time pad
+# 7. Nese tentohet komunikimi prape celesi nderrohet, pasi eshte one time pad
 # 8. Ne kod perdoren dy funksione nje per enkriptim dhe nje per dekriptim
 import random
 
@@ -27,8 +27,7 @@ def generateKey():
     return key
 
 
-key = generateKey()
-print("Key generated is: ", key)
+
 
 # definimi i shkronjave dhe korrespondenteve numra te tyre
 alphabet = {'A': 1, 'B': 2, 'C': 3, 'D': 4, 'E': 5, 'F': 6,
@@ -36,14 +35,6 @@ alphabet = {'A': 1, 'B': 2, 'C': 3, 'D': 4, 'E': 5, 'F': 6,
             'M': 13, 'N': 14, 'O': 15, 'P': 16, 'Q': 17, 'R': 18,
             'S': 19, 'T': 20, 'U': 21, 'V': 22, 'W': 23, 'X': 24,
             'Y': 25, 'Z': 26}
-
-# programi kryesor ne te cilin thirret funksionet e shkruara
-start = 1
-while start == 1:
-    plaintext = input("Alice writes a message: ")
-    # ketu thirren funksionet per enkriptim dhe dekriptim
-    # poashtu pyetet user nese deshiron te shkembeje prape mesazh, me crast nderrohet celesi
-    break
 
 
 # funksioni per xor
@@ -82,10 +73,6 @@ def plain_to_number(plaintext):
     return numberMessage
 
 
-# lista qe ka numrat per cdo shkronje te mesazhit
-
-plainNum = plain_to_number(plaintext)
-print("Mesazhi i shnderruar nga shkronjat ne numra eshte: ", plainNum)
 
 
 # funksioni qe shendrron cdo listen e numrave ne mesazh ne liste me numra binar
@@ -96,14 +83,11 @@ def numToBinaryFormat(numList):
     return numList
 
 
-# lista qe ka anetaret e mesazhit ne numra binare
-binaryNum = numToBinaryFormat(plainNum)
-
-print("Mesazhi i shendrruar nga numrat decimal ne numra binare eshte: ", binaryNum)
 
 
 # funksioni qe kthen celesin me gjatesi te njejte sa plaintext
-def key_lengthAs_plaintext(key):
+
+def key_lengthAs_plaintext(key,binaryNum):
     binaryKey = decimal_to_binary(key)
 
     msgLength = 0
@@ -119,11 +103,7 @@ def key_lengthAs_plaintext(key):
     return keyList
 
 
-# celesi nga int32 ne numer binar
-binaryKey = key_lengthAs_plaintext(key)
-print("Celesi i shendrruar ne te njejten gjatesi sa mesazhi dhe ne formatin binar eshte: ", binaryKey)
-
-
+# funksioni qe ben xor ne mes te dy vargjeve me numra binar. Na duhet per enkriptim si dhe dekriptim
 def xorBinary(list1, list2):
     # vendosja e numrave binare nje nga nje duke i bere xor
     cryptedList = list()
@@ -146,10 +126,8 @@ def xorBinary(list1, list2):
     return cryptedBinary
 
 
-binaryCipher = xorBinary(binaryNum, binaryKey)
-print("Cipher ne binar pasi eshte bere xor celesi me mesazhin eshte: ", binaryCipher)
 
-
+# shnderrimi i mesazhit binar ne mesazh plaintext
 def numbersToText(lista):
     # se pari marrim mesazhin binar cipher dhe e shendrrojme ne decimal
     cipherDecimal = list()
@@ -163,54 +141,112 @@ def numbersToText(lista):
         for a in alphabet:
             if j == alphabet[a]:
                 cipherText.append(a)
-
-        if (j > 26):
-            val = j % 26
-            val = alphabet[val]
-            cipherText.append(val)
-
-        elif j == 0:
+            elif (j > 26) and alphabet[a] == (j%26):
+                #val = j % 26
+                #letter = alphabet[val]
+                cipherText.append(a)
+        if j == 0:
             cipherText.append('Z')
     print("Cipher nga decimal ne tekst eshte: ",cipherText)
     return ''.join(cipherText)
 
 
-def encrypt(plaintext):
+def encrypt():
     print("\n Alice and Bob have agreed on using a new key every time they communicate!")
+    global key
+    key = generateKey()
     print("The key is generated from a int32, and it is: ", key)
+
+    global plaintext
+    plaintext = input("Alice writes a message: ")
+
+
+    # lista qe ka numrat per cdo shkronje te mesazhit
+    plainNum = plain_to_number(plaintext)
+    print("Mesazhi i shnderruar nga shkronjat ne numra eshte: ", plainNum)
+
+
+    # lista qe ka anetaret e mesazhit ne numra binare
+    binaryNum = numToBinaryFormat(plainNum)
+    print("Mesazhi i shendrruar nga numrat decimal ne numra binare eshte: ", binaryNum)
+
+
+    # celesi nga int32 ne numer binar
+    binaryKey = key_lengthAs_plaintext(key,binaryNum)
+    print("Celesi i shendrruar ne te njejten gjatesi sa mesazhi dhe ne formatin binar eshte: ", binaryKey)
+
+
+    #Ciphertext ne format binar
+    binaryCipher = xorBinary(binaryNum, binaryKey)
+    print("Cipher ne binar pasi eshte bere xor celesi me mesazhin eshte: ", binaryCipher)
+
+
     ciphertext = numbersToText(binaryCipher)
     print("The ciphertext that Bob reads is: ", ciphertext)
     return ciphertext
 
-c = encrypt(plaintext)
 
-# prej qitu kqyreni qysh ka dallim formati binar, zerot perpara te ciphertext spo i merr
-print("\n \n \n prova debugging")
-print("Celesi ne binar eshte: ",binaryKey)
 
-print("Ciphertext eshte: ",c)
-cipherNr = plain_to_number(c)
-print("Ciphertext ne numra eshte: ",cipherNr)
-cipherbinar = numToBinaryFormat(cipherNr)
-print("Ciphertext ne binar eshte: ",cipherbinar)
-plain = xorBinary(cipherbinar,binaryKey)
-print("Plaintext ne binare eshte : ",plain)
-text = numbersToText(plain)
-print("Mesazhi plaintext eshte i dekriptuar! ",text)
+# funksioni poshte krahason cipher gjate dekriptimit kur shendrrohet ne format binar,
+# a eshte i njejte me formatin binar te cipher gjate enkriptimit, nese jo, beji te njejta ne menyre qe
+# rezultati te jete i sakte
+def keepCipherLength(cipher1,cipher2):
+    for i in range(0,len(cipher2)):
+        if(len(cipher1[i]) != len(cipher2[i])):
+            cipher1[i] = cipher2[i]
 
-# --------------------------------------------------------------------------------------------
+
 def decrypt(ciphertext):
-    cipherNumber = plain_to_number(ciphertext)
-    print("ciphertext ne numer eshte: ", cipherNumber)
-    # kthimi i cipher ne binare
-    cipherbinary = numToBinaryFormat(cipherNumber)
-    print("Ciphertext ne binary eshte: ", cipherbinary)
+    print("Ciphertext eshte: ",ciphertext)
+    cipherNr = plain_to_number(ciphertext)
+    print("Ciphertext ne numra eshte: ",cipherNr)
 
-    plaintextBinary = xorBinary(cipherbinary, binaryKey)
-    print("Ciphertext i bere xor me celesin qe na jep plaintext ne binary eshte: ", plaintextBinary)
 
-    plain = numbersToText(plaintextBinary)
-    print("Mesazhi plaintext i dekriptuar eshte: ", plain)
-    return plain
+    cipher = list()
 
-# decrypt(c)
+    for i in range(0,len(cipherNr)):
+        if(cipherNr[i] == 26):
+            cipher.append('0000')
+        else:
+            cipher.append(decimal_to_binary(cipherNr[i]))
+
+    plainNum = plain_to_number(plaintext)
+    binaryNum = numToBinaryFormat(plainNum)
+    binaryKey = key_lengthAs_plaintext(key,binaryNum)
+    binaryCipher = xorBinary(binaryNum, binaryKey)
+
+    keepCipherLength(cipher,binaryCipher)
+    print("Cipher si string me numer: ",cipher)
+
+    print("Celesi ne binar eshte: ",binaryKey)
+    plain = xorBinary(cipher,binaryKey)
+    print("Plaintext ne binare eshte : ",plain)
+    text = numbersToText(plain)
+    print("Mesazhi plaintext eshte i dekriptuar! ",text)
+    return text
+
+
+
+
+# programi kryesor ne te cilin thirret funksionet e shkruara
+start = 1
+while start == 1:
+    # ketu thirren funksionet per enkriptim dhe dekriptim
+    # poashtu pyetet user nese deshiron te shkembeje prape mesazh, me crast nderrohet celesi
+    ans = input("\nDeshironi te komunikoni? \n")
+    if( ans == 'y' or ans =='Y'):
+        print("--------ENCRYPTION--------")
+        c = encrypt()
+        print("\n\n\n")
+        print("--------DECRYPTION--------")
+        decrypt(c)
+    elif( ans == 'n' or ans == 'N'):
+        break
+
+
+
+
+
+
+
+
