@@ -9,6 +9,9 @@ class Decryption:
     def set_ciphertext(self, ciphertext):
         self.ciphertext = ciphertext
 
+    def get_plaintext(self):
+        return self.plaintext
+
     def decrypt(self):
 
         cipher_number = Operations.plaintext_to_number(self.ciphertext)
