@@ -2,8 +2,6 @@ import secrets
 import string
 
 from operation import Operations
-
-
 class Encryption:
 
     def __init__(self, gjatesia):
@@ -22,6 +20,7 @@ class Encryption:
 
     def get_encrypted_message(self):
         return self.encrypted_message
+
     def encrypt(self):
         print("The key is generated from a int32, and it is: ", self.__key)
 
