@@ -1,16 +1,20 @@
 import secrets
 import string
 
+from pip._vendor.pyparsing import Char
+
+
 class Encryption:
 
     def __init__(self, gjatesia):
         self.gjatesia = gjatesia
         self.message = ''
         self.encrypted_message = ''
+        self.__key = ''
 
     def generate_string_seed(self):
         alphabet = string.ascii_letters + string.digits
-        seed = ''.join(secrets.choice(alphabet) for i in range(self.gjatesia)).upper()
+        seed = ''.join(secrets.choice(alphabet) for i in range(self.gjatesia))
         return seed
 
     def setMessage(self, message):
@@ -37,7 +41,7 @@ class Encryption:
 
     @staticmethod
     def decimal_to_binary_number(decimal_num):
-        binary_num = bin(decimal_num)
+        binary_num = bin(int(decimal_num))
         # bin() returns a string with '0b' prefix, so we slice it off using [2:]
         return binary_num[2:]
 
@@ -56,8 +60,9 @@ class Encryption:
         return numList
 
     @staticmethod
-    def key_lengthAs_plaintext(key,binaryNum):
-        binaryKey = Encryption.decimal_to_binary(key)
+    def key_lengthAs_plaintext(key, binaryNum):
+        number_key = Encryption.plain_to_number(key)
+        binaryKey = Encryption.decimal_to_binary_number(number_key)
 
         msgLength = 0
         msgStart = 0
@@ -74,8 +79,6 @@ class Encryption:
     def xor_binary(list1, list2):
         crypted_list = list()
         crypted_binary = list()
-
-        member = ''
         starti = 0
 
         for i in range(0, len(list1)):
@@ -89,23 +92,45 @@ class Encryption:
             starti = finish
             crypted_binary.append(member)
         return crypted_binary
+
+    @staticmethod
+    def numbers_to_text(lista):
+        # se pari marrim mesazhin binar cipher dhe e shendrrojme ne decimal
+        cipherDecimal = list()
+        cipherText = list()
+        for i in range(0, len(lista)):
+            member = Encryption.binary_to_decimal(lista[i])
+            cipherDecimal.append(member)
+        print("Cipher nga binar ne decimal eshte: ", cipherDecimal)
+        # tash e shendrrojme nga numri decimal ne tekst
+        for j in cipherDecimal:
+            cipherText.append(Char(j))
+
+        print("Cipher nga decimal ne tekst eshte: ", cipherText)
+        return ''.join(cipherText)
+
     def encrypt(self):
-        global key
-        key = Encryption.generate_string_seed(self);
+        self.__key = Encryption.generate_string_seed(self)
+        print("The key is generated from a int32, and it is: ", self.__key)
 
-        global plain_text
-        plain_text = Encryption.setMessage()
-
-        plain_number = Encryption.plain_to_number(plain_text)
+        plain_number = Encryption.plain_to_number(self.message)
+        print("Mesazhi i shnderruar nga shkronjat ne numra eshte: ", plain_number)
 
         binary_number = Encryption.num_to_binaryFormat(plain_number)
+        print("Mesazhi i shendrruar nga numrat decimal ne numra binare eshte: ", binary_number)
 
-        binary_key = Encryption.key_lengthAs_plaintext(key, binary_number)
+        binary_key = Encryption.key_lengthAs_plaintext(self.__key, binary_number)
+        print("Celesi i shendrruar ne te njejten gjatesi sa mesazhi dhe ne formatin binar eshte: ", binary_key)
 
-        binary_cipher = Encryption.xor(binary_number, binary_key)
+        binary_cipher = Encryption.xor_binary(binary_number, binary_key)
+        print("Cipher ne binar pasi eshte bere xor celesi me mesazhin eshte: ", binary_cipher)
 
-        ciphertext = numbers_To_Text(binary_cipher)
-        return ciphertext
+        self.encrypted_message = Encryption.numbers_To_Text(binary_cipher)
+        print("The ciphertext that Bob reads is: ", self.encrypted_message)
+        return self.encrypted_message
 
 
+enc = Encryption(20)
+enc.setMessage("Hello there")
+enc.encrypt()
 
