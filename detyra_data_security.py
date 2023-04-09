@@ -17,7 +17,7 @@ class MyWindow(QMainWindow):
 
         # Caktimi i titullit te dritares dhe i madhesise
         self.setWindowTitle("One Time Pad")
-        self.setFixedWidth(500)
+        self.setFixedWidth(700)
         self.setFixedHeight(500)
 
         # Krijimi i tabave dhe shtimi i tyre ne dritare
@@ -75,7 +75,7 @@ class MyWindow(QMainWindow):
         self.encrypt_button.setStyleSheet("background-color: #008CBA; color: #fff; padding: 10px;")
 
     def decrypt_tab_elements(self):
-        self.decrypt_title_label = QLabel("<h2>You can decrypt here</h2>")
+        self.decrypt_title_label = QLabel("<h2>You can decrypt here!</h2>")
         self.decrypt_key_label = QLabel("<h4>Enter the key:</h4>")
         self.decrypt_key_textbox = qtw.QLineEdit()
         self.decrypt_ciphertext_label = QLabel("<h4>Enter your ciphertext:</h4>")
@@ -106,7 +106,6 @@ class MyWindow(QMainWindow):
         self.key_text_box.setText(" ")
         self.key = self.encrypt.get_key()
         self.key_text_box.setText(str(self.key))
-        print(self.key)
 
     def encryption(self):
         plaintext = self.plaintext_box.toPlainText()
