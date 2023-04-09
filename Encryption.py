@@ -41,7 +41,7 @@ class Encryption:
 
     @staticmethod
     def decimal_to_binary_number(decimal_num):
-        binary_num = bin(int(decimal_num))
+        binary_num = bin(decimal_num)
         # bin() returns a string with '0b' prefix, so we slice it off using [2:]
         return binary_num[2:]
 
@@ -56,41 +56,46 @@ class Encryption:
     def num_to_binaryFormat(numList):
         for i in range(0, len(numList)):
             numList[i] = Encryption.decimal_to_binary_number(numList[i])
+            difference = 8 - len(numList[i])
+            if(difference > 0):
+                numList[i] = '0'*difference + numList[i]
+            else:
+                pass
+
 
         return numList
 
     @staticmethod
     def key_lengthAs_plaintext(key, binaryNum):
+        #
         number_key = Encryption.plain_to_number(key)
-        binaryKey = Encryption.decimal_to_binary_number(number_key)
+        print(number_key)
+        binaryKey = list()
+        #numer 576710450876
+        for i in range(0,len(binaryNum)):
+            binaryMember = Encryption.decimal_to_binary_number(number_key[i])
+            difference = 8 - len(binaryMember)
+            if(difference > 0):
+                binaryKey.append('0'*difference + binaryMember)
+            else:
+                binaryKey.append(binaryMember)
 
-        msgLength = 0
-        msgStart = 0
-
-        keyList = list()
-
-        for i in range(0, len(binaryNum)):
-            msgLength += len(binaryNum[i])
-            keyList.append(binaryKey[msgStart:msgLength])
-            msgStart = msgLength
-
-        return keyList
+        return binaryKey
 
     def xor_binary(list1, list2):
+        # list 1 = mesazhi biar
+        # list 2 = celesi binar
+
         crypted_list = list()
         crypted_binary = list()
-        starti = 0
+
 
         for i in range(0, len(list1)):
-            for j in range(0, len(list2)):
-                crypted_list.append(Encryption.xor(list1[i][j], list2[i][j]))
+            crypted_list = [Encryption.xor(a, b) for a, b in zip(list1[i], list2[i])]
+            member = ''.join(crypted_list)
 
-            finish = len(list1[i] + starti)
-
-            member = ''.join(crypted_list[starti:finish])
-
-            starti = finish
             crypted_binary.append(member)
+
         return crypted_binary
 
     @staticmethod
@@ -104,7 +109,7 @@ class Encryption:
         print("Cipher nga binar ne decimal eshte: ", cipherDecimal)
         # tash e shendrrojme nga numri decimal ne tekst
         for j in cipherDecimal:
-            cipherText.append(Char(j))
+            cipherText.append(chr(j))
 
         print("Cipher nga decimal ne tekst eshte: ", cipherText)
         return ''.join(cipherText)
@@ -125,7 +130,7 @@ class Encryption:
         binary_cipher = Encryption.xor_binary(binary_number, binary_key)
         print("Cipher ne binar pasi eshte bere xor celesi me mesazhin eshte: ", binary_cipher)
 
-        self.encrypted_message = Encryption.numbers_To_Text(binary_cipher)
+        self.encrypted_message = Encryption.numbers_to_text(binary_cipher)
         print("The ciphertext that Bob reads is: ", self.encrypted_message)
         return self.encrypted_message
 
