@@ -1,7 +1,8 @@
 import secrets
 import string
-
 from operation import Operations
+
+
 class Encryption:
 
     def __init__(self, gjatesia):
@@ -41,6 +42,3 @@ class Encryption:
 
         return self.encrypted_message
 
-enc = Encryption(20)
-enc.set_message('Hello there')
-enc.encrypt()
