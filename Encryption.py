@@ -19,6 +19,9 @@ class Encryption:
     def set_message(self, message):
         self.message = message
 
+    def get_key(self):
+        return self.__key
+
     def get_encrypted_message(self):
         return self.encrypted_message
 

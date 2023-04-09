@@ -1,10 +1,13 @@
 from operation import Operations
 
 class Decryption:
-    def __init__(self, key):
-        self.__key = key
+    def __init__(self):
+        self.__key = ''
         self.ciphertext = ''
         self.plaintext = ''
+
+    def set_key(self, key):
+        self.__key = key
 
     def set_ciphertext(self, ciphertext):
         self.ciphertext = ciphertext
@@ -28,3 +31,5 @@ class Decryption:
 
         plaintext = Operations.numbers_to_plaintext(plain_binary_xor)
         print("Plaintext : ", plaintext)
+
+        return plaintext
