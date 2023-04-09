@@ -1,7 +1,7 @@
 import secrets
 import string
 
-from SiguriaETeDhenave_Detyra2.operation import Operations
+from operation import Operations
 
 
 class Encryption:
@@ -17,9 +17,11 @@ class Encryption:
         seed = ''.join(secrets.choice(alphabet) for i in range(self.gjatesia))
         return seed
 
-    def setMessage(self, message):
+    def set_message(self, message):
         self.message = message
 
+    def get_encrypted_message(self):
+        return self.encrypted_message
     def encrypt(self):
         print("The key is generated from a int32, and it is: ", self.__key)
 
@@ -41,5 +43,5 @@ class Encryption:
         return self.encrypted_message
 
 enc = Encryption(20)
-enc.setMessage('Hello there')
+enc.set_message('Hello there')
 enc.encrypt()

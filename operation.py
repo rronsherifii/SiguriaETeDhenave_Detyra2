@@ -61,7 +61,7 @@ class Operations:
         for i in range(0, len(lista)):
             member = Operations.binary_to_decimal(lista[i])
             cipherDecimal.append(member)
-        # print("Cipher nga binar ne decimal eshte: ", cipherDecimal)
+        print("Cipher nga binar ne decimal eshte: ", cipherDecimal)
 
         # tash e shendrrojme nga numri decimal ne tekst
         for j in cipherDecimal:
