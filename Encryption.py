@@ -1,6 +1,8 @@
 import secrets
 import string
 
+from detyra2 import decimal_to_binary
+
 
 class Encryption:
 
@@ -41,3 +43,10 @@ class Encryption:
         for i in range(0, len(plaintext)):
             number_message.append(ord(plaintext[i]))
         return number_message
+
+    @staticmethod
+    def num_to_binaryFormat(numList):
+        for i in range(0, len(numList)):
+            numList[i] = decimal_to_binary(numList[i])
+
+        return numList
