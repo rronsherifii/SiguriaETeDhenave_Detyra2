@@ -50,3 +50,18 @@ class Encryption:
             numList[i] = decimal_to_binary(numList[i])
 
         return numList
+    @staticmethod
+    def key_lengthAs_plaintext(key,binaryNum):
+        binaryKey = decimal_to_binary(key)
+
+        msgLength = 0
+        msgStart = 0
+
+        keyList = list()
+
+        for i in range(0, len(binaryNum)):
+            msgLength += len(binaryNum[i])
+            keyList.append(binaryKey[msgStart:msgLength])
+            msgStart = msgLength
+
+        return keyList
