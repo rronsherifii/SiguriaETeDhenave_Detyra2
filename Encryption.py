@@ -1,16 +1,20 @@
 import secrets
 import string
 
-from detyra2 import decimal_to_binary
-
-
 class Encryption:
 
-    @staticmethod
-    def generate_string_seed(gjatesia):
+    def __init__(self, gjatesia):
+        self.gjatesia = gjatesia
+        self.message = ''
+        self.encrypted_message = ''
+
+    def generate_string_seed(self):
         alphabet = string.ascii_letters + string.digits
-        seed = ''.join(secrets.choice(alphabet) for i in range(gjatesia)).upper()
+        seed = ''.join(secrets.choice(alphabet) for i in range(self.gjatesia)).upper()
         return seed
+
+    def setMessage(self, message):
+        self.message = message
 
     @staticmethod
     def xor(a, b):
@@ -32,7 +36,7 @@ class Encryption:
         return decimal_value
 
     @staticmethod
-    def decimal_to_binary(decimal_num):
+    def decimal_to_binary_number(decimal_num):
         binary_num = bin(decimal_num)
         # bin() returns a string with '0b' prefix, so we slice it off using [2:]
         return binary_num[2:]
@@ -47,9 +51,10 @@ class Encryption:
     @staticmethod
     def num_to_binaryFormat(numList):
         for i in range(0, len(numList)):
-            numList[i] = decimal_to_binary(numList[i])
+            numList[i] = Encryption.decimal_to_binary_number(numList[i])
 
         return numList
+
     @staticmethod
     def key_lengthAs_plaintext(key,binaryNum):
         binaryKey = decimal_to_binary(key)
@@ -65,3 +70,5 @@ class Encryption:
             msgStart = msgLength
 
         return keyList
+
+    
