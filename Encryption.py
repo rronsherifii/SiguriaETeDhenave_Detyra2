@@ -57,7 +57,7 @@ class Encryption:
 
     @staticmethod
     def key_lengthAs_plaintext(key,binaryNum):
-        binaryKey = decimal_to_binary(key)
+        binaryKey = Encryption.decimal_to_binary(key)
 
         msgLength = 0
         msgStart = 0
@@ -71,4 +71,41 @@ class Encryption:
 
         return keyList
 
-    
+    def xor_binary(list1, list2):
+        crypted_list = list()
+        crypted_binary = list()
+
+        member = ''
+        starti = 0
+
+        for i in range(0, len(list1)):
+            for j in range(0, len(list2)):
+                crypted_list.append(Encryption.xor(list1[i][j], list2[i][j]))
+
+            finish = len(list1[i] + starti)
+
+            member = ''.join(crypted_list[starti:finish])
+
+            starti = finish
+            crypted_binary.append(member)
+        return crypted_binary
+    def encrypt(self):
+        global key
+        key = Encryption.generate_string_seed(self);
+
+        global plain_text
+        plain_text = Encryption.setMessage()
+
+        plain_number = Encryption.plain_to_number(plain_text)
+
+        binary_number = Encryption.num_to_binaryFormat(plain_number)
+
+        binary_key = Encryption.key_lengthAs_plaintext(key, binary_number)
+
+        binary_cipher = Encryption.xor(binary_number, binary_key)
+
+        ciphertext = numbers_To_Text(binary_cipher)
+        return ciphertext
+
+
+
