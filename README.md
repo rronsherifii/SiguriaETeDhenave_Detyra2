@@ -14,9 +14,9 @@ kurse dekriptimi behet duke kryer XOR mes ciphertextit dhe celesit per te mberri
 One Time Pad ofron siguri maksimale sepse eshte e pamundur te dihet celesi kur cdo here
 nderron me cdo komunikim dhe nuk ka ndonje strukture me ane te se ciles gjendet mesazhi plain.
 
-Gjithsesi, ky algoritem ka pengesat e veta qe nuk e bejne efikas ne perdorim large-scale 
-sepse duhet zgjidhur problemi i shperndarjes se celesave ne mes te paleve komunikuese per cdo komunikim te tyre.
---------------------------------------------------------------------
+*Gjithsesi, ky algoritem ka pengesat e veta qe nuk e bejne efikas ne perdorim large-scale 
+sepse duhet zgjidhur problemi i shperndarjes se celesave ne mes te paleve komunikuese per cdo komunikim te tyre.*
+
 
 Implementimin e algoritmit e kemi bere duke perdorur Python OOP, ne nje file kemi shkruar klasat baze
 qe kryejne funksionet e nevojshme gjate enkriptimit/dekriptimit.
